@@ -5,18 +5,22 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
+use App\Models\Solde_flooz;
 use Filament\Tables\Table;
-use App\Models\Solde_tmoney;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SoldeTmoneyResource\Pages;
-use App\Filament\Resources\SoldeTmoneyResource\RelationManagers;
+use App\Filament\Resources\SoldeFloozResource\Pages;
+use App\Filament\Resources\SoldeFloozResource\RelationManagers;
 
-class SoldeTmoneyResource extends Resource
+class SoldeFloozResource extends Resource
 {
-    protected static ?string $model = Solde_tmoney::class;
+    protected static ?string $navigationGroup = 'Soldes';
+    protected static ?string $label = 'Flooz';
+    protected static ?string $pluralLabel = 'Flooz';
+    protected static ?string $model = Solde_flooz::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -24,7 +28,8 @@ class SoldeTmoneyResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextColumn::make('Montant')
+                ->weight(FontWeight::Bold)
             ]);
     }
 
@@ -32,35 +37,26 @@ class SoldeTmoneyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Montant')
-                ->weight(FontWeight::Bold)
+                TextColumn::make('Montant'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-    
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
     
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSoldeTmoneys::route('/'),
-            'create' => Pages\CreateSoldeTmoney::route('/create'),
-            'edit' => Pages\EditSoldeTmoney::route('/{record}/edit'),
+            'index' => Pages\ManageSoldeFloozs::route('/'),
         ];
     }    
 }

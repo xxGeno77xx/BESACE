@@ -21,9 +21,7 @@ return new class extends Migration
                 TypesClass::Retrait()->value,
                 TypesClass::Depot()->value
             ]);
-
-            $table->unsignedBigInteger('solde_flooz_id');
-            $table->foreign('solde_flooz_id')->references('id')->on('solde_floozs');
+            $table->integer('solde_flooz_restant');  
             $table->timestamps();
         });
     }

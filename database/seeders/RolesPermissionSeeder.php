@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Solde_flooz;
 use App\Models\SoldeGlobal;
 use App\Models\User;
 use App\Support\Classes;
@@ -45,6 +46,10 @@ class RolesPermissionSeeder extends Seeder
 
         $soldeGlobal  = SoldeGlobal::firstOrCreate([
             "Montant" => 6000000, 
+        ]);
+
+        $soldeFlooz  = Solde_flooz::firstOrCreate([
+            "Montant" => 50000, 
         ]);
     }
 }
