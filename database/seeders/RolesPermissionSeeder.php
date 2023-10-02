@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\SoldeGlobal;
 use App\Models\User;
 use App\Support\Classes;
+use App\Models\Solde_tmoney;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -34,6 +36,15 @@ class RolesPermissionSeeder extends Seeder
             "email" => "superadministrateur@laposte.tg",
             'password' => Hash::make('11111111'),
             'name' => 'Super_administrateur',
+
+        ]);
+
+        $soldeTmoeny  = Solde_tmoney::firstOrCreate([
+            "Montant" => 50000, 
+        ]);
+
+        $soldeGlobal  = SoldeGlobal::firstOrCreate([
+            "Montant" => 6000000, 
         ]);
     }
 }

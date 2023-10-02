@@ -22,8 +22,7 @@ return new class extends Migration
                 TypesClass::Depot()->value
             ]);
 
-            $table->unsignedBigInteger('solde_tmoney_id');
-            $table->foreign('solde_tmoney_id')->references('id')->on('solde_tmoneys');
+            $table->integer('solde_tmoney_restant');
             $table->timestamps();
         });
     }
