@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Enums\TypesClass;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -16,9 +17,12 @@ return new class extends Migration
             $table->integer('Montant');
             $table->string('Nom_client');
             $table->integer('commission');
-
-            $table->unsignedBigInteger('solde_Xpress_id');
-            $table->foreign('solde_Xpress_id')->references('id')->on('solde_xpresses');
+            $table->integer('Téléphone');
+            $table->enum('Type',[
+                TypesClass::Retrait()->value,
+                TypesClass::Depot()->value
+            ]);
+            $table->integer('solde_Xpress_restant');
 
             $table->timestamps();
         });

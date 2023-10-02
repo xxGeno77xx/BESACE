@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\commission_xpress;
 use App\Models\Solde_flooz;
+use App\Models\Solde_xpress;
 use App\Models\SoldeGlobal;
 use App\Models\User;
 use App\Support\Classes;
@@ -41,7 +43,7 @@ class RolesPermissionSeeder extends Seeder
         ]);
 
         $soldeTmoeny  = Solde_tmoney::firstOrCreate([
-            "Montant" => 50000, 
+            "Montant" => 150000, 
         ]);
 
         $soldeGlobal  = SoldeGlobal::firstOrCreate([
@@ -49,7 +51,15 @@ class RolesPermissionSeeder extends Seeder
         ]);
 
         $soldeFlooz  = Solde_flooz::firstOrCreate([
-            "Montant" => 50000, 
+            "Montant" => 250000, 
+        ]);
+
+        $soldeXpress  = Solde_xpress::firstOrCreate([
+            "Montant" => 350000, 
+        ]);
+
+        $soldeCommissionsXpress  = commission_xpress::firstOrCreate([
+            "Montant" => 0, 
         ]);
     }
 }
