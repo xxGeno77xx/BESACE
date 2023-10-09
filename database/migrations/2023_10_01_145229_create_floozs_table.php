@@ -21,7 +21,17 @@ return new class extends Migration
                 TypesClass::Retrait()->value,
                 TypesClass::Depot()->value
             ]);
+            $table->enum('operation',[
+                TypesClass::Xpress()->value,
+                TypesClass::Tmoney()->value,
+                TypesClass::Western()->value,
+                TypesClass::FLooz()->value,
+                TypesClass::Ria()->value,
+            ])
+            ->default(TypesClass::FLooz()->value); 
             $table->integer('solde_flooz_restant');  
+            $table->unsignedBigInteger('user_id'); 
+            $table->foreign('user_id')->references('id')->on('users');   
             $table->timestamps();
         });
     }

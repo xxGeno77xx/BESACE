@@ -5,23 +5,19 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
+use App\Models\CaisseMoov;
 use Filament\Tables\Table;
-use App\Models\Solde_flooz;
 use Filament\Resources\Resource;
-use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SoldeFloozResource\Pages;
-use App\Filament\Resources\SoldeFloozResource\RelationManagers;
+use App\Filament\Resources\CaisseMoovResource\Pages;
+use App\Filament\Resources\CaisseMoovResource\RelationManagers;
 
-class SoldeFloozResource extends Resource
+class CaisseMoovResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Soldes';
-    protected static ?string $label = 'Flooz';
-    protected static ?string $pluralLabel = 'Flooz';
-    protected static ?string $model = Solde_flooz::class;
+    protected static ?string $model = CaisseMoov::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -29,8 +25,7 @@ class SoldeFloozResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('Montant')
-                
+                TextInput::make('Montant'),
             ]);
     }
 
@@ -38,15 +33,13 @@ class SoldeFloozResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Montant')
-                ->weight(FontWeight::Bold),
+                TextColumn::make('Montant'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -55,10 +48,19 @@ class SoldeFloozResource extends Resource
             ]);
     }
     
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+    
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSoldeFloozs::route('/'),
+            'index' => Pages\ListCaisseMoovs::route('/'),
+            'create' => Pages\CreateCaisseMoov::route('/create'),
+            'edit' => Pages\EditCaisseMoov::route('/{record}/edit'),
         ];
     }    
 }

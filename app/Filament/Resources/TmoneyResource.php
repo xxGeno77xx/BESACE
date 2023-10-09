@@ -26,12 +26,12 @@ use App\Filament\Resources\TmoneyResource\RelationManagers;
 class TmoneyResource extends Resource
 {
 
-    protected static ?string $navigationGroup = 'Transferts';
+    protected static ?string $navigationGroup = 'Transferts d\'argent';
     protected static ?string $label = 'Tmoney';
     protected static ?string $pluralLabel = 'Tmoney';
     protected static ?string $model = Tmoney::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     public static function form(Form $form): Form
     {
@@ -41,11 +41,12 @@ class TmoneyResource extends Resource
                 TextInput::make('Commission'),
                 TextInput::make('Téléphone'),
                 Select::make('Type')
-                ->options([
-                    TypesClass::Retrait()->value => 'Retrait',
-                    TypesClass::Depot()->value => 'Dépot'
-                ]),
-                Hidden::make('solde_tmoney_restant')         
+                    ->options([
+                        TypesClass::Retrait()->value => 'Retrait',
+                        TypesClass::Depot()->value => 'Dépot'
+                    ]),
+                Hidden::make('user_id')
+                    ->default(auth()->user()->id),        
             ]);
                                   
     }
@@ -53,13 +54,10 @@ class TmoneyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Téléphone')
-                ->numeric(),
                 TextColumn::make('Montant')
                 ->numeric(),
-                TextColumn::make('Commission')
-                ->numeric(), 
-                TextColumn::make('solde_tmoney_restant'),
+                TextColumn::make('Téléphone')
+                ->numeric(),
                 BadgeColumn::make('Type')
                 ->colors([
                     'success' => static fn ($state): bool => $state === TypesClass::Depot()->value,
@@ -68,6 +66,11 @@ class TmoneyResource extends Resource
                 TextColumn::make('created_at')
                 ->label('Date')
                 ->date('H:i d-m-Y'),
+                TextColumn::make('Commission')
+                ->numeric(), 
+                TextColumn::make('solde_tmoney_restant'),
+               
+               
             ])
             ->filters([
                 //

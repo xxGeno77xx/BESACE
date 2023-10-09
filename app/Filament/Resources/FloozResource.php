@@ -21,12 +21,12 @@ use App\Filament\Resources\FloozResource\RelationManagers;
 
 class FloozResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Transferts';
+    protected static ?string $navigationGroup = 'Transferts d\'argent';
     protected static ?string $label = 'Flooz';
     protected static ?string $pluralLabel = 'Flooz';
     protected static ?string $model = Flooz::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     public static function form(Form $form): Form
     {
@@ -40,7 +40,9 @@ class FloozResource extends Resource
                     TypesClass::Retrait()->value => 'Retrait',
                     TypesClass::Depot()->value => 'Dépot'
                 ]),
-                Hidden::make('solde_flooz_restant')
+                Hidden::make('solde_flooz_restant'),
+                Hidden::make('user_id')
+                        ->default(auth()->user()->id),
             ]);
     }
 
@@ -49,21 +51,20 @@ class FloozResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('Téléphone')
-                ->numeric(),
+                    ->numeric(),
                 TextColumn::make('Montant')
-                ->numeric(),
+                    ->numeric(),
                 TextColumn::make('Commission')
-                ->numeric(), 
+                    ->numeric(), 
                 TextColumn::make('solde_flooz_restant'),
                 BadgeColumn::make('Type')
-                ->colors([
-                    'success' => static fn ($state): bool => $state === TypesClass::Depot()->value,
-                    'danger' => static fn ($state): bool => $state === TypesClass::Retrait()->value,
-                ]),
+                    ->colors([
+                        'success' => static fn ($state): bool => $state === TypesClass::Depot()->value,
+                        'danger' => static fn ($state): bool => $state === TypesClass::Retrait()->value,
+                    ]),
                 TextColumn::make('created_at')
-                ->label('Date')
-                ->date('H:i d-m-Y'),
-
+                    ->label('Date')
+                    ->date('H:i d-m-Y'),
             ])
             ->filters([
                 //

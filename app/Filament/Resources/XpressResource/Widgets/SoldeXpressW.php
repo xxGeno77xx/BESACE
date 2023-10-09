@@ -12,12 +12,10 @@ class SoldeXpressW extends Widget
     protected function getStats(): array
     {
         return [
-
-
-        Card::make('Caisse','ddd')
-            ->description('32k increase')
-            ->chart([mt_rand(1, 50),mt_rand(1, 50), mt_rand(1, 50), mt_rand(1, 50), mt_rand(1, 50), mt_rand(1, 50), mt_rand(1, 50)])
-            ->color("success"),
+        // Card::make('Caisse','ddd')
+        //     ->description('32k increase')
+        //     ->chart([mt_rand(1, 50),mt_rand(1, 50), mt_rand(1, 50), mt_rand(1, 50), mt_rand(1, 50), mt_rand(1, 50), mt_rand(1, 50)])
+        //     ->color("success"),
         ];
     }
 }

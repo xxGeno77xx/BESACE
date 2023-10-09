@@ -9,7 +9,12 @@ use \Spatie\Enum\Enum;
  * @method static self Forfait_appel()
  * @method static self Forfait_internet()
  * @method static self CreditSimple()
- * 
+ * ===============================================
+ * @method static self Xpress()
+ * @method static self Ria()
+ * @method static self Western()
+ * @method static self Tmoney()
+ * @method static self Flooz()
  */
 class TypesClass extends Enum
 {

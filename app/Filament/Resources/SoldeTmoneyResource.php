@@ -64,7 +64,7 @@ class SoldeTmoneyResource extends Resource
     {
         return [
             'index' => Pages\ListSoldeTmoneys::route('/'),
-            'create' => Pages\CreateSoldeTmoney::route('/create'),
+            // 'create' => Pages\CreateSoldeTmoney::route('/create'),
             'edit' => Pages\EditSoldeTmoney::route('/{record}/edit'),
         ];
     }    

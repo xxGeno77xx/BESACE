@@ -24,7 +24,7 @@ class ListXpresses extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            XpressResource\Widgets\SoldeXpressW::class,
+            // XpressResource\Widgets\SoldeXpressW::class,
         ];
     }
 

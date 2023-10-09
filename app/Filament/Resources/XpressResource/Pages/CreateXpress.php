@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\XpressResource\Pages;
 
 use App\Models\commission_xpress;
+use App\Models\Registre;
 use Filament\Actions;
 use App\Enums\TypesClass;
 use App\Models\SoldeGlobal;
@@ -50,6 +51,7 @@ class CreateXpress extends CreateRecord
         commission_xpress::first()->update([
             'Montant'=>  $ajoutCommission 
         ]);
+
       
     }
 

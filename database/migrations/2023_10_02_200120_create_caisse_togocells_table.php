@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('money_grams', function (Blueprint $table) {
+        Schema::create('caisse_togocells', function (Blueprint $table) {
             $table->id();
             $table->integer('Montant');
-            $table->unsignedBigInteger('user_id'); 
-            $table->foreign('user_id')->references('id')->on('users');
-
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('money_grams');
+        Schema::dropIfExists('caisse_togocells');
     }
 };

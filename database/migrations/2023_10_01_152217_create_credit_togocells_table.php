@@ -22,8 +22,7 @@ return new class extends Migration
                 TypesClass::Forfait_internet()->value,
             ]);
 
-            $table->unsignedBigInteger('solde_credit_togocell_id');
-            $table->foreign('solde_credit_togocell_id')->references('id')->on('solde_credit_togocells');
+            $table->integer('solde_restant_credit_togocell');
             $table->timestamps();
         });
     }

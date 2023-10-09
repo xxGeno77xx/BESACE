@@ -6,22 +6,20 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use App\Models\Solde_flooz;
+use App\Models\CaisseTogocell;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\TextInputColumn;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SoldeFloozResource\Pages;
-use App\Filament\Resources\SoldeFloozResource\RelationManagers;
+use App\Filament\Resources\CaisseTogocellResource\Pages;
+use App\Filament\Resources\CaisseTogocellResource\RelationManagers;
 
-class SoldeFloozResource extends Resource
+class CaisseTogocellResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Soldes';
-    protected static ?string $label = 'Flooz';
-    protected static ?string $pluralLabel = 'Flooz';
-    protected static ?string $model = Solde_flooz::class;
+    protected static ?string $model = CaisseTogocell::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -29,8 +27,7 @@ class SoldeFloozResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('Montant')
-                
+                TextInput::make('Montant'),
             ]);
     }
 
@@ -46,7 +43,6 @@ class SoldeFloozResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -55,10 +51,19 @@ class SoldeFloozResource extends Resource
             ]);
     }
     
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+    
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSoldeFloozs::route('/'),
+            'index' => Pages\ListCaisseTogocells::route('/'),
+            'create' => Pages\CreateCaisseTogocell::route('/create'),
+            'edit' => Pages\EditCaisseTogocell::route('/{record}/edit'),
         ];
     }    
 }
