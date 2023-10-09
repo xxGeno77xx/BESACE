@@ -51,27 +51,27 @@ class ListUsers extends ListRecords
         // $unionQuery = $tmoneys->unionAll($xpress)
         //                         ->unionAll($flooz);
 
-        $tmoneys = Tmoney::select('Montant','tmoneys.Type as Type','tmoneys.operation as operation','tmoneys.created_at as time','Commission', 'user_id as user_id');
+        $tmoneys = Tmoney::select('Montant','tmoneys.Type as Type','tmoneys.operation as operation','tmoneys.created_at as time','Commission', 'user_id as user_id',);
 
-        $xpress =Xpress::select('Montant', 'xpresses.Type as Type', 'xpresses.operation  as operation','xpresses.created_at as time','commission as Comission' , 'user_id as user_id');
+        $xpress =Xpress::select('Montant', 'xpresses.Type as Type', 'xpresses.operation  as operation','xpresses.created_at as time','commission as Comission' , 'user_id as user_id',);
 
-        $flooz = Flooz::select('Montant', 'floozs.Type as Type', 'floozs.operation  as operation','floozs.created_at as time','Commission as Commission','user_id as user_id');
+        $flooz = Flooz::select('Montant', 'floozs.Type as Type', 'floozs.operation  as operation','floozs.created_at as time','Commission as Commission','user_id as user_id',);
 
         $unionQuery = $tmoneys->unionAll($xpress)->unionAll($flooz);
 
-        $unionQuery->select( 'Montant', 'Type as Type', 'operation  as operation','created_at as time','Commission as Commission','user_id as user_id');
 
         $query = static::getResource()::getEloquentQuery()
-        ->select('users.id', 'Montant as Montant', 'Type as Type', 'operation as operation','created_at as time','Commission as Commission', 'user_id as user_id')
+        ->select('users.id', 'Montant as Montant', 'Type as Type', 'operation as operation','Commission as Commission', 'user_id as user_id', 'time', )
         ->joinSub($unionQuery, 'temp_table', function (JoinClause $join) {
             $join->on('users.id', '=', 'temp_table.user_id');
         });
-
+        
         return $query;
 
 
         
     }
+
 
 }
 

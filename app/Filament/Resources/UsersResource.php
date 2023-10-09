@@ -18,6 +18,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ColorColumn;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,6 +26,7 @@ use Illuminate\Database\Query\JoinClause;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Tables\Columns\Summarizers\Sum;
 use App\Filament\Resources\UsersResource\Pages;
+use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UsersResource\RelationManagers;
 
@@ -65,11 +67,11 @@ class UsersResource extends Resource
                                 // ->query(fn (Build $query) => $query->where('Type', TypesClass::Depot()->value)),
                         ]),
                 TextColumn::make('time')
-                    ->date('H:i / d-m-Y')
+                    ->date('l, d-m-Y à H:i')
                     ->label('Date et heure'),   
             ])
             ->filters([
-                Filter::make('created_at')
+                Filter::make('time')
                 ->label('Date')
                         ->form([
                             Grid::make(2) 
@@ -90,22 +92,19 @@ class UsersResource extends Resource
 
                             $unionQuery = $tmoneys->unionAll($xpress)->unionAll($flooz);
 
-                            $unionQuery->select('Montant', 'Type as Type', 'operation  as operation','created_at as time','Commission as Commission', 'user_id as user_id');
-
-                            $query = User::select('Montant', 'Type as Type', 'operation as operation','created_at as time','Commission as Commission', 'user_id as user_id' )
+                            $query = User::select('Montant', 'Type as Type', 'operation as operation','Commission as Commission','time' )
                                 ->joinSub($unionQuery, 'temp_table', function (JoinClause $join) {
                                     $join->on('users.id', '=', 'temp_table.user_id');
                                 });
 
                             return $query
-                               
                                 ->when(
                                     $data['date_from'],
-                                    fn (Builder $query, $date) => $query->whereDate('time', '>=', $date)
+                                    fn (Builder $query, $date): Builder => $query->whereDate('time', '>=' , $date)
                                 )
                                 ->when(
                                     $data['date_to'],
-                                    fn (Builder $query, $date) => $query->whereDate('time', '<=', $date)
+                                    fn (Builder $query, $date):Builder => $query->whereDate('time', '<=' , $date)
                                 );    
                         })
                         ->indicateUsing(function (array $data): ?string {
@@ -124,6 +123,7 @@ class UsersResource extends Resource
                     ]),
 
                 SelectFilter::make('operation')
+                    ->multiple()                                 
                     ->label('Opération')
                     ->options([
                         TypesClass::Tmoney()->value => 'Tmoney',
@@ -132,7 +132,12 @@ class UsersResource extends Resource
                         TypesClass::Western()->value => 'Western Union',
                         TypesClass::FLooz()->value => 'Flooz',
                     ])
-            ])
+            ], layout: FiltersLayout::AboveContentCollapsible)
+            ->filtersTriggerAction(
+                fn (Action $action) => $action
+                    ->button()
+                    ->label('Filtrer les résultats'),
+            )
             ->actions([
                 // Tables\Actions\EditAction::make(),
             ])
@@ -141,7 +146,7 @@ class UsersResource extends Resource
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('time', 'asc')
+            ->defaultSort('time', 'desc')
             ->recordUrl(null);
     }
     
@@ -160,4 +165,6 @@ class UsersResource extends Resource
             'edit' => Pages\EditUsers::route('/{record}/edit'),
         ];
     }    
+
+
 }
