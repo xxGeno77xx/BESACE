@@ -14,6 +14,7 @@ use App\Enums\TypesClass;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
@@ -24,9 +25,9 @@ use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Columns\Summarizers\Sum;
 use App\Filament\Resources\UsersResource\Pages;
-use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UsersResource\RelationManagers;
 
@@ -48,12 +49,25 @@ class UsersResource extends Resource
 
     public static function table(Table $table): Table
     {
+        
         return $table
             ->columns([
                 TextColumn::make('Montant')
-                    ->searchable(),
-                TextColumn::make('operation')
-                    ->searchable(),
+                    ->searchable()
+                    ->numeric(
+                        decimalPlaces: 0,
+                        decimalSeparator: '.',
+                        thousandsSeparator: '.',
+                    )->color('grey'),
+                    TextColumn::make('operation')
+                    ->searchable()
+                    ->colors([
+                        'info' => static fn ($state): bool => $state === TypesClass::Xpress()->value,
+                        'fuschia' => static fn ($state): bool => $state === TypesClass::Tmoney()->value,
+                        'amber' => static fn ($state): bool => $state === TypesClass::Ria()->value,
+                        'gray' => static fn ($state): bool => $state === TypesClass::Flooz()->value,
+                    ])
+                    ->sortable(),
                 BadgeColumn::make('Type')
                     ->colors([
                         'success' => static fn ($state): bool => $state === TypesClass::Depot()->value,
@@ -63,12 +77,13 @@ class UsersResource extends Resource
                         ->alignment('center')
                         ->color('success')
                         ->summarize([
-                            Sum::make()->label('Total des  gains')
+                            Sum::make()->label('Total des commisisons')
                                 // ->query(fn (Build $query) => $query->where('Type', TypesClass::Depot()->value)),
                         ]),
                 TextColumn::make('time')
                     ->date('l, d-m-Y à H:i')
-                    ->label('Date et heure'),   
+                    ->label('Date et heure')
+                    ->sortable(),   
             ])
             ->filters([
                 Filter::make('time')
@@ -83,32 +98,6 @@ class UsersResource extends Resource
                             ])->columns(1)
                         ])
                         ->query(function (Builder $query, array $data): Builder {
-
-                            // $tmoneys = Tmoney::select('Montant','tmoneys.Type as Type','tmoneys.operation as operation','tmoneys.created_at as time','Commission as Commission', 'user_id as user_id');
-
-                            // $xpress =Xpress::select('Montant', 'xpresses.Type as Type', 'xpresses.operation  as operation','xpresses.created_at as time','commission as Comission' , 'user_id as user_id');
-
-                            // $flooz = Flooz::select('Montant', 'floozs.Type as Type', 'floozs.operation  as operation','floozs.created_at as time','Commission as Commission','user_id as user_id');
-
-                            // $unionQuery = $tmoneys->unionAll($xpress)->unionAll($flooz);
-
-                            // $query = User::select('Montant', 'Type as Type', 'operation as operation','Commission as Commission','time' )
-                            //     ->joinSub($unionQuery, 'temp_table', function (JoinClause $join) {
-                            //         $join->on('users.id', '=', 'temp_table.user_id');
-                            //     });
-
-                            // $tmoneys = Tmoney::select('Montant','tmoneys.Type as Type','tmoneys.operation as operation','tmoneys.created_at as time','Commission', 'user_id as user_id',);
-
-                            // $xpress =Xpress::select('Montant', 'xpresses.Type as Type', 'xpresses.operation  as operation','xpresses.created_at as time','commission as Comission' , 'user_id as user_id',);
-
-                            // $flooz = Flooz::select('Montant', 'floozs.Type as Type', 'floozs.operation  as operation','floozs.created_at as time','Commission as Commission','user_id as user_id',);
-
-                            // $unionQuery = $tmoneys->unionAll($xpress)->unionAll($flooz);
-
-                            // $query = User::select('users.id', 'Montant as Montant', 'Type as Type', 'operation as operation','Commission as Commission', 'user_id as user_id', 'time', )
-                            // ->joinSub($unionQuery, 'temp_table', function (JoinClause $join) {
-                            //     $join->on('users.id', '=', 'temp_table.user_id');
-                            // });
 
                             return $query
                                 ->when(

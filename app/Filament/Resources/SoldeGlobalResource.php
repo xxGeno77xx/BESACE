@@ -38,8 +38,14 @@ class SoldeGlobalResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Montant')
-                ->weight(FontWeight::Bold)
+                
+                Split::make([
+                    TextColumn::make('Montant')
+                                ->weight(FontWeight::Bold)
+                                ->size(TextColumn\TextColumnSize::Large)
+                                ->alignment('center'),
+                ]),
+                
             ])
             ->filters([
                 //
@@ -50,6 +56,10 @@ class SoldeGlobalResource extends Resource
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
+            ])
+            ->contentGrid([
+                'md' => 1,
+                'xl' => 1,
             ]);
     }
     

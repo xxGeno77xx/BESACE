@@ -14,7 +14,9 @@ return new class extends Migration
     {
         Schema::create('rias', function (Blueprint $table) {
             $table->id();
-            $table->integer('Montant');
+            $table->json('Montant');
+            $table->integer('remboursement')->nullable();
+            $table->integer('Commission');
             $table->enum('operation',[
                 TypesClass::Xpress()->value,
                 TypesClass::Tmoney()->value,
@@ -22,6 +24,7 @@ return new class extends Migration
                 TypesClass::FLooz()->value,
                 TypesClass::Ria()->value,
             ])  ->default(TypesClass::Ria()->value);
+            $table->string('Type')->default(TypesClass::Retrait()->value);
             $table->unsignedBigInteger('user_id'); 
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

@@ -34,22 +34,6 @@ class ListUsers extends ListRecords
 
     protected function getTableQuery(): ?Builder
     {
-        
-
-        // $tmoneys = static::getResource()::getEloquentQuery()
-        //     ->join('tmoneys', 'tmoneys.user_id', 'users.id')
-        //     ->select('users.id','Montant','Type','tmoneys.operation as operation','tmoneys.created_at as time','Commission','users.created_at as users_created_at');
-
-        // $xpress = static::getResource()::getEloquentQuery()
-        //     ->join('xpresses', 'xpresses.user_id', 'users.id')
-        //     ->select('users.id','Montant', 'Type', 'xpresses.operation  as operation','xpresses.created_at as time','commission as Comission' ,'users.created_at as users_created_at');
-
-        // $flooz =static::getResource()::getEloquentQuery()
-        //     ->join('floozs', 'floozs.user_id', 'users.id')
-        //     ->select('users.id','Montant', 'Type', 'floozs.operation  as operation','floozs.created_at as time','Commission as Commission','users.created_at as users_created_at' );
-
-        // $unionQuery = $tmoneys->unionAll($xpress)
-        //                         ->unionAll($flooz);
 
         $tmoneys = Tmoney::select('Montant','tmoneys.Type as Type','tmoneys.operation as operation','tmoneys.created_at as time','Commission', 'user_id as user_id',);
 
@@ -57,7 +41,10 @@ class ListUsers extends ListRecords
 
         $flooz = Flooz::select('Montant', 'floozs.Type as Type', 'floozs.operation  as operation','floozs.created_at as time','Commission as Commission','user_id as user_id',);
 
-        $unionQuery = $tmoneys->unionAll($xpress)->unionAll($flooz);
+        $ria = Ria::select('remboursement as Montant', 'rias.Type as Type', 'rias.operation  as operation','rias.created_at as time','Commission as Commission','user_id as user_id',)
+        ->whereNotNull('remboursement');
+
+        $unionQuery = $tmoneys->unionAll($xpress)->unionAll($flooz)->unionAll($ria);
 
 
         $query = static::getResource()::getEloquentQuery()
