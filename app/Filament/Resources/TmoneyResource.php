@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\Summarizers\Sum;
 use App\Filament\Resources\TmoneyResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\TmoneyResource\RelationManagers;
@@ -67,7 +68,14 @@ class TmoneyResource extends Resource
                 ->label('Date')
                 ->date('H:i d-m-Y'),
                 TextColumn::make('Commission')
-                ->numeric(), 
+                ->numeric(
+                    decimalPlaces: 0,
+                    decimalSeparator: '.',
+                    thousandsSeparator: '.',
+                )
+                ->summarize([
+                    Sum::make()->label('Commissions')
+                ]), 
                 TextColumn::make('solde_tmoney_restant'),
                
                

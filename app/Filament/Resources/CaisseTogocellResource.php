@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\Layout\Split;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\TextInputColumn;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -35,8 +36,12 @@ class CaisseTogocellResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Montant')
-                ->weight(FontWeight::Bold),
+                Split::make([
+                    TextColumn::make('Montant')
+                                ->weight(FontWeight::Bold)
+                                ->size(TextColumn\TextColumnSize::Large)
+                                ->alignment('center'),
+                ]),
             ])
             ->filters([
                 //
@@ -46,8 +51,12 @@ class CaisseTogocellResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->contentGrid([
+                'md' => 1,
+                'xl' => 1,
             ]);
     }
     

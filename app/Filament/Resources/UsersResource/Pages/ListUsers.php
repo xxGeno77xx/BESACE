@@ -41,7 +41,7 @@ class ListUsers extends ListRecords
 
         $flooz = Flooz::select('Montant', 'floozs.Type as Type', 'floozs.operation  as operation','floozs.created_at as time','Commission as Commission','user_id as user_id',);
 
-        $ria = Ria::select('remboursement as Montant', 'rias.Type as Type', 'rias.operation  as operation','rias.created_at as time','Commission as Commission','user_id as user_id',)
+        $ria = Ria::select('remboursement as Montant', 'rias.Type as Type', 'rias.operation  as operation','rias.date_remboursement as time','Commission as Commission','user_id as user_id',)
         ->whereNotNull('remboursement');
 
         $unionQuery = $tmoneys->unionAll($xpress)->unionAll($flooz)->unionAll($ria);

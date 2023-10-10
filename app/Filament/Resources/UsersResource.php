@@ -81,7 +81,7 @@ class UsersResource extends Resource
                                 // ->query(fn (Build $query) => $query->where('Type', TypesClass::Depot()->value)),
                         ]),
                 TextColumn::make('time')
-                    ->date('l, d-m-Y à H:i')
+                    ->date('l, d.MY')
                     ->label('Date et heure')
                     ->sortable(),   
             ])

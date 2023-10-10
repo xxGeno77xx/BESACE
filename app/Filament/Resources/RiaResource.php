@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Carbon\Carbon;
 use App\Models\Ria;
 use Filament\Forms;
 use Filament\Tables;
@@ -9,8 +10,10 @@ use Filament\Forms\Form;
 use App\Enums\TypesClass;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use App\Tables\Columns\JsonColumn;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Illuminate\Database\Query\Builder;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -18,8 +21,9 @@ use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\SelectColumn;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\Summarizers\Sum;
 use App\Filament\Resources\RiaResource\Pages;
+use Filament\Tables\Columns\Summarizers\Summarizer;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RiaResource\RelationManagers;
 
@@ -40,6 +44,8 @@ class RiaResource extends Resource
                 TextInput::make('remboursement')
                     ->label('Remboursement')
                     ->hiddenOn('create'),
+                DatePicker::make('date_remboursement')
+                    ->HiddenOn('create'),
                 Repeater::make('Montant')
                     ->schema([
                         TextInput::make('valeur')
@@ -52,7 +58,7 @@ class RiaResource extends Resource
                 Hidden::make('user_id')
                     ->default(auth()->user()->id),
                 Hidden::make('Commission')
-                    ->default(0),
+                    ->default(0),                 
                 Hidden::make('operation')
                     ->default(TypesClass::Ria()->value),
                  Hidden::make('Type')
@@ -65,50 +71,58 @@ class RiaResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('remboursement')
-                ->tooltip(function (Model $record): string {
+                    ->tooltip(function (Model $record): string {
 
-                    $arraySize = count($record->Montant);
+                        $arraySize = count($record->Montant);
 
-                    $returnArray= [];
+                        $returnArray= [];
 
-                    for($i= 0; $i <  $arraySize; $i++){
+                        for($i= 0; $i <  $arraySize; $i++){
 
-                        $returnArray[$i] = $record->Montant[$i]['valeur'];
-                       
-                    }
-                   return implode(",", $returnArray);
-                })
-                ->description(function (Model $record): string {
+                            $returnArray[$i] = $record->Montant[$i]['valeur'].' du '.carbon::parse(($record->Montant[$i]['Date']))->format('d-m-y');
+                        
+                        }
+                    return implode(" ,", $returnArray);
+                    })
+                    // ->description(function (Model $record): string {
 
-                    $arraySize = count($record->Montant);
+                    //     $arraySize = count($record->Montant);
 
-                    $returnArray= [];
+                    //     $returnArray= [];
 
-                    for($i= 0; $i <  $arraySize; $i++){
+                    //     for($i= 0; $i <  $arraySize; $i++){
 
-                        $returnArray[$i] = $record->Montant[$i]['valeur'];
-                       
-                    }
+                    //         $returnArray[$i] = $record->Montant[$i]['valeur'];
+                        
+                    //     }
 
-                   return implode(",", $returnArray);
-                })
-                ->placeholder('Non rembousé.')
-                ->numeric(
-                    decimalPlaces: 0,
-                    decimalSeparator: '.',
-                    thousandsSeparator: '.',
-                ),
+                    // return implode(",", $returnArray);
+                    // })
+                    ->placeholder('Non rembousé.')
+                    ->numeric(
+                        decimalPlaces: 0,
+                        decimalSeparator: '.',
+                        thousandsSeparator: '.',
+                    ),
+                JsonColumn::make('Montant')
+                    ->label('Montants')
+                    ->toggleable()
+                    ->summarize(Summarizer::make()
+                    ),
                 TextColumn::make('Commission')
+                    ->numeric(
+                        decimalPlaces: 0,
+                        decimalSeparator: '.',
+                        thousandsSeparator: '.',
+                    )
+                    ->summarize([
+                        Sum::make()->label('Commissions')
+                    ]),
+                TextColumn::make('date_remboursement')
+                    ->label('Date du remboursement')
+                    ->placeholder('-')
+                    ->date('l, d-M-Y'),
                 
-                ->numeric(
-                    decimalPlaces: 0,
-                    decimalSeparator: '.',
-                    thousandsSeparator: '.',
-                ),
-                // TextColumn::make('Montant'),
-                TextColumn::make('created_at')
-                    ->label('Date')
-                    ->date('l, d-m-Y à H:i'),
 
             ])
             ->filters([

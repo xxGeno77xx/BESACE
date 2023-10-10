@@ -25,6 +25,7 @@ return new class extends Migration
                 TypesClass::Ria()->value,
             ])  ->default(TypesClass::Ria()->value);
             $table->string('Type')->default(TypesClass::Retrait()->value);
+            $table->date('date_remboursement')->nullable();
             $table->unsignedBigInteger('user_id'); 
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\Layout\Split;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SoldeTmoneyResource\Pages;
@@ -37,8 +38,12 @@ class SoldeTmoneyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Montant')
-                ->weight(FontWeight::Bold)
+                Split::make([
+                    TextColumn::make('Montant')
+                                ->weight(FontWeight::Bold)
+                                ->size(TextColumn\TextColumnSize::Large)
+                                ->alignment('center'),
+                ]),
             ])
             ->filters([
                 //
@@ -50,6 +55,10 @@ class SoldeTmoneyResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->contentGrid([
+                'md' => 1,
+                'xl' => 1,
             ]);
     }
     

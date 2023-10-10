@@ -8,8 +8,10 @@ use Filament\Forms\Form;
 use App\Models\CaisseMoov;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\Layout\Split;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CaisseMoovResource\Pages;
@@ -25,15 +27,21 @@ class CaisseMoovResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('Montant'),
+                
             ]);
+         
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('Montant'),
+                Split::make([
+                    TextColumn::make('Montant')
+                                ->weight(FontWeight::Bold)
+                                ->size(TextColumn\TextColumnSize::Large)
+                                ->alignment('center'),
+                ])
             ])
             ->filters([
                 //
@@ -43,8 +51,12 @@ class CaisseMoovResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->contentGrid([
+                'md' => 1,
+                'xl' => 1,
             ]);
     }
     

@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\Layout\Split;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SoldeFloozResource\Pages;
@@ -31,6 +32,7 @@ class SoldeFloozResource extends Resource
             ->schema([
                 TextInput::make('Montant')
                 
+                
             ]);
     }
 
@@ -38,20 +40,28 @@ class SoldeFloozResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Montant')
-                ->weight(FontWeight::Bold),
+                Split::make([
+                    TextColumn::make('Montant')
+                        ->weight(FontWeight::Bold)
+                        ->size(TextColumn\TextColumnSize::Large)
+                        ->alignment('center'),
+                ]),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->contentGrid([
+                'md' => 1,
+                'xl' => 1,
             ]);
     }
     
