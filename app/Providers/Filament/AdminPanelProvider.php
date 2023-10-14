@@ -62,6 +62,7 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
                 'fuschia'=> Color::Fuchsia,
                 'amber'=> Color::Amber,
+                'yellow'=>Color::Yellow,
                 
             ])
            ;

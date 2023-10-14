@@ -6,33 +6,30 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use App\Models\SoldeGlobal;
 use Filament\Resources\Resource;
+use App\Models\SoldeCreditTogocell;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\Layout\Split;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SoldeGlobalResource\Pages;
-use App\Filament\Resources\SoldeGlobalResource\RelationManagers;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
+use App\Filament\Resources\SoldeCreditTogocellResource\Pages;
+use App\Filament\Resources\SoldeCreditTogocellResource\RelationManagers;
 
-class SoldeGlobalResource extends Resource
+class SoldeCreditTogocellResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Caisses';
+    protected static ?string $model = SoldeCreditTogocell::class;
 
-    protected static ?string $label = 'Caisse Transferts';
-    protected static ?string $pluralLabel = 'Caisse Transferts';
-    protected static ?string $model = SoldeGlobal::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-wallet';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('Montant'),
+                TextInput::make('Montant')
+                
             ]);
     }
 
@@ -40,14 +37,12 @@ class SoldeGlobalResource extends Resource
     {
         return $table
             ->columns([
-                
                 Split::make([
                     TextColumn::make('Montant')
-                                ->weight(FontWeight::Bold)
-                                ->size(TextColumn\TextColumnSize::Large)
-                                ->alignment('center'),
+                            ->weight(FontWeight::Bold)
+                            ->size(TextColumnSize::Large)
+                            ->alignment('center'),
                 ]),
-                
             ])
             ->filters([
                 //
@@ -56,8 +51,9 @@ class SoldeGlobalResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    // Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ])
             ->contentGrid([
                 'md' => 1,
@@ -65,11 +61,19 @@ class SoldeGlobalResource extends Resource
             ]);
     }
     
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+    
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSoldeGlobals::route('/'),
+            'index' => Pages\ListSoldeCreditTogocells::route('/'),
+            'create' => Pages\CreateSoldeCreditTogocell::route('/create'),
+            'edit' => Pages\EditSoldeCreditTogocell::route('/{record}/edit'),
         ];
     }    
-
 }

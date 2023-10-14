@@ -16,6 +16,7 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 class caisse extends BaseWidget
 {
+    protected static ?string $pollingInterval = '1s';
     protected function getStats(): array
     {
         return [
@@ -64,4 +65,6 @@ class caisse extends BaseWidget
     
         ];
     }
+
+    
 }

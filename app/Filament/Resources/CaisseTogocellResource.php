@@ -21,6 +21,10 @@ use App\Filament\Resources\CaisseTogocellResource\RelationManagers;
 class CaisseTogocellResource extends Resource
 {
     protected static ?string $model = CaisseTogocell::class;
+    protected static ?string $navigationGroup = 'Caisses';
+
+    protected static ?string $label = 'Caisse togocell';
+    protected static ?string $pluralLabel = 'Caisse togocell';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -38,16 +42,16 @@ class CaisseTogocellResource extends Resource
             ->columns([
                 Split::make([
                     TextColumn::make('Montant')
-                                ->weight(FontWeight::Bold)
-                                ->size(TextColumn\TextColumnSize::Large)
-                                ->alignment('center'),
+                        ->weight(FontWeight::Bold)
+                        ->size(TextColumn\TextColumnSize::Large)
+                        ->alignment('center'),
                 ]),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -71,8 +75,8 @@ class CaisseTogocellResource extends Resource
     {
         return [
             'index' => Pages\ListCaisseTogocells::route('/'),
-            'create' => Pages\CreateCaisseTogocell::route('/create'),
-            'edit' => Pages\EditCaisseTogocell::route('/{record}/edit'),
+            // 'create' => Pages\CreateCaisseTogocell::route('/create'),
+            // 'edit' => Pages\EditCaisseTogocell::route('/{record}/edit'),
         ];
     }    
 }

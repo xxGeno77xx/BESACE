@@ -21,6 +21,10 @@ class CaisseMoovResource extends Resource
 {
     protected static ?string $model = CaisseMoov::class;
 
+    protected static ?string $navigationGroup = 'Caisses';
+    protected static ?string $label = 'Caisse Moov';
+    protected static ?string $pluralLabel = 'Caisse Moov';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -47,7 +51,7 @@ class CaisseMoovResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -71,8 +75,8 @@ class CaisseMoovResource extends Resource
     {
         return [
             'index' => Pages\ListCaisseMoovs::route('/'),
-            'create' => Pages\CreateCaisseMoov::route('/create'),
-            'edit' => Pages\EditCaisseMoov::route('/{record}/edit'),
+            // 'create' => Pages\CreateCaisseMoov::route('/create'),
+            // 'edit' => Pages\EditCaisseMoov::route('/{record}/edit'),
         ];
     }    
 }

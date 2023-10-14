@@ -16,13 +16,14 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Query\Builder as Build;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Query\JoinClause;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Infolists\Components\TextEntry;
@@ -52,22 +53,33 @@ class UsersResource extends Resource
         
         return $table
             ->columns([
+                TextColumn::make('operation')
+                ->searchable()
+                ->colors([
+                    'info' => static fn ($state): bool => $state === TypesClass::Xpress()->value,
+                    'fuschia' => static fn ($state): bool => $state === TypesClass::Tmoney()->value,
+                    'amber' => static fn ($state): bool => $state === TypesClass::Ria()->value,
+                    'gray' => static fn ($state): bool => $state === TypesClass::Flooz()->value,
+                ])
+                ->sortable(),
                 TextColumn::make('Montant')
                     ->searchable()
                     ->numeric(
                         decimalPlaces: 0,
                         decimalSeparator: '.',
                         thousandsSeparator: '.',
-                    )->color('grey'),
-                    TextColumn::make('operation')
-                    ->searchable()
-                    ->colors([
-                        'info' => static fn ($state): bool => $state === TypesClass::Xpress()->value,
-                        'fuschia' => static fn ($state): bool => $state === TypesClass::Tmoney()->value,
-                        'amber' => static fn ($state): bool => $state === TypesClass::Ria()->value,
-                        'gray' => static fn ($state): bool => $state === TypesClass::Flooz()->value,
-                    ])
-                    ->sortable(),
+                    )
+                    ->color('grey')
+                    ->summarize([
+                        Sum::make()->label('Total des opérations')
+                            ->query(function (Build $query){
+
+                                $query->where('Type', TypesClass::Retrait()->value)->dumpRawSql();
+                                    // ->whereNot('Type', TypesClass::Retrait()->value);
+
+                            })      
+                    ]),
+                   
                 BadgeColumn::make('Type')
                     ->colors([
                         'success' => static fn ($state): bool => $state === TypesClass::Depot()->value,

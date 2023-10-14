@@ -20,6 +20,7 @@ return new class extends Migration
                 TypesClass::CreditSimple()->value,
                 TypesClass::Forfait_appel()->value,
                 TypesClass::Forfait_internet()->value,
+                TypesClass::Recharge()->value
             ]);
 
             $table->integer('solde_restant_credit_moov');

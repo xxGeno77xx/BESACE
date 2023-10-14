@@ -15,6 +15,7 @@ use \Spatie\Enum\Enum;
  * @method static self Western()
  * @method static self Tmoney()
  * @method static self Flooz()
+ * @method static self Recharge()
  */
 class TypesClass extends Enum
 {
@@ -24,7 +25,8 @@ class TypesClass extends Enum
 
             $traductions = array(
                 "Depot" => "Dépot",
-                "CreditSimple"=>"Crédit simple"
+                "CreditSimple"=>"Crédit simple",
+                "Recharge" => "Alimentation du compte"
             );
             return strtr(str_replace("_", ": ", str($name)), $traductions);;
         };
