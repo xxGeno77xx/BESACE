@@ -22,7 +22,8 @@ return new class extends Migration
                 TypesClass::Forfait_internet()->value,
                 TypesClass::Recharge()->value
             ]);
-
+            $table->integer('commission')->nullable();
+            $table->integer('montant_recharge')->nullable();
             $table->integer('solde_restant_credit_moov');
             $table->timestamps();
         });

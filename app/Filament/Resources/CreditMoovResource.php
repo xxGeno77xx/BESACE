@@ -10,6 +10,7 @@ use App\Enums\TypesClass;
 use App\Models\CreditMoov;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
@@ -19,9 +20,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Enums\FiltersLayout;
-use Filament\Forms\Components\DatePicker;
 
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\Summarizers\Count;
 use Illuminate\Database\Eloquent\Builder as Build;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -60,8 +62,8 @@ class CreditMoovResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('Montant'),
                 TextColumn::make('Numéro_telephone'),
+                BadgeColumn::make('Montant'),
                 TextColumn::make('solde_restant_credit_moov'),
                 BadgeColumn::make('Type_operation')
                 ->colors([
@@ -70,14 +72,26 @@ class CreditMoovResource extends Resource
                     'danger' => static fn ($state): bool => $state === TypesClass::CreditSimple()->value,
                     'yellow' => static fn ($state): bool => $state === TypesClass::Recharge()->value,
 
-                ])
-                ->summarize([
-                    Count::make()->query(fn (Builder $query) => $query->where('Type_operation', TypesClass::Recharge()->value))
-                                ->label('Nombre de recharges'),   
                 ]),
+                
+                // ->summarize([
+                //     Count::make()->query(fn (Builder $query) => $query->where('Type_operation', TypesClass::Recharge()->value))
+                //                 ->label('Nombre de recharges'),   
+                // ]),
                 TextColumn::make('created_at')
                 ->label('Date')
                 ->date('l,d-m-Y'),
+
+                // BadgeColumn::make('montant_recharge')
+                //     ->label('Montant rechargé')
+                //     ->placeholder("-"),
+
+                BadgeColumn::make('commission')
+                ->label('Commission')
+                ->placeholder('-')
+                ->color(Color::Green)
+                ->summarize(Sum::make()->label('Total des commissions')),
+
             ])
             ->filters([
                 Filter::make('created_at')
@@ -96,11 +110,11 @@ class CreditMoovResource extends Resource
                             return $query
                                 ->when(
                                     $data['date_from'],
-                                    fn (Build $query, $date): Build => $query->whereDate('time', '>=' , $date)
+                                    fn (Build $query, $date): Build => $query->whereDate('created_at', '>=' , $date)
                                 )
                                 ->when(
                                     $data['date_to'],
-                                    fn (Build $query, $date):Build => $query->whereDate('time', '<=' , $date)
+                                    fn (Build $query, $date):Build => $query->whereDate('created_at', '<=' , $date)
                                 );    
                         })
                         ->indicateUsing(function (array $data): ?string {
@@ -130,9 +144,9 @@ class CreditMoovResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
     

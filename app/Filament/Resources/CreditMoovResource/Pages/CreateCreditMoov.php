@@ -16,10 +16,10 @@ class CreateCreditMoov extends CreateRecord
     {
         $moov=$this->record;
 
-        $soldeCreditMoov=SoldeCreditMoov::first()->value('Montant');
+        $soldeCreditMoov = SoldeCreditMoov::first()->value('Montant');
 
 
-        $soldeCaisseMoov= CaisseMoov::first()->value('Montant');
+        $soldeCaisseMoov = CaisseMoov::first()->value('Montant');
 
         SoldeCreditMoov::first()->update([
             'Montant' => $soldeCreditMoov - $moov->Montant

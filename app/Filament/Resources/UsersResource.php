@@ -77,7 +77,10 @@ class UsersResource extends Resource
                                 $query->where('Type', TypesClass::Retrait()->value)->dumpRawSql();
                                     // ->whereNot('Type', TypesClass::Retrait()->value);
 
-                            })      
+                            })
+
+                        
+                            
                     ]),
                    
                 BadgeColumn::make('Type')

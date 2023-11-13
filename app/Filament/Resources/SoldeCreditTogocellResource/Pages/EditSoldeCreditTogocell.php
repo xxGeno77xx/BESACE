@@ -21,24 +21,53 @@ class EditSoldeCreditTogocell extends EditRecord
         ];
     }
 
-    public function afterSave()
+    // public function afterSave()
+    // {
+    //    if($this->isAugmentedSolde())
+    //    {
+    //     CaisseTogocell::first()->update([
+    //         "Montant" => 0
+    //     ]);
+    //     CreditTogocell::create([
+    //         'Montant' => $this->data['Montant'],
+    //         'Numéro_telephone'=> 22222222,
+    //         'Type_operation'=> TypesClass::Recharge()->value,
+    //         'solde_restant_credit_togocell'=> $this->data['Montant'] 
+    //     ]);
+    //    }
+    // }
+
+    // public function isAugmentedSolde():bool
+    // {
+    //     return SoldeCreditTogocell::first()->value('Montant') < $this->data;
+    // }
+    public function beforeSave()
     {
-       if($this->isAugmentedSolde())
-       {
-        CaisseTogocell::first()->update([
-            "Montant" => 0
-        ]);
-        CreditTogocell::create([
-            'Montant' => $this->data['Montant'],
-            'Numéro_telephone'=> 22222222,
-            'Type_operation'=> TypesClass::Recharge()->value,
-            'solde_restant_credit_togocell'=> $this->data['Montant'] 
-        ]);
-       }
+        // if ($this->isAugmentedSolde()) {
+
+            CaisseTogocell::first()->update([
+                "Montant" => 0
+            ]);
+
+            CreditTogocell::create([
+                'Montant' => $this->data['Montant'],
+                'Numéro_telephone' => 22222222,
+                'Type_operation' => TypesClass::Recharge()->value,
+                'solde_restant_credit_togocell' => $this->data['Montant'] + $this->record['Montant'] + ($this->data['Montant'] * 0.05),
+                'montant_recharge' => $this->data['Montant'],
+                'commission' => $this->data['Montant'] * 0.05
+            ]);
     }
 
-    public function isAugmentedSolde():bool
+    public function isAugmentedSolde(): bool
     {
-        return SoldeCreditTogocell::first()->value('Montant') < $this->data;
+        return SoldeCreditTogocell::first()->value('Montant') <= $this->data['Montant'];
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['Montant'] += $this->record['Montant'];
+
+        return $data;
     }
 }

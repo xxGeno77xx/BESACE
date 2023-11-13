@@ -10,19 +10,24 @@ use App\Models\Tmoney;
 use Filament\Forms\Form;
 use App\Enums\TypesClass;
 use Filament\Tables\Table;
-use App\Models\Solde_tmoney;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\BadgeColumn;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\Summarizers\Sum;
 use App\Filament\Resources\TmoneyResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\TmoneyResource\RelationManagers;
+use Carbon\Carbon;
+use Filament\Forms\Components\Grid;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\Summarizers\Count;
+use Illuminate\Database\Eloquent\Builder as Build;
+
 
 class TmoneyResource extends Resource
 {
@@ -81,8 +86,51 @@ class TmoneyResource extends Resource
                
             ])
             ->filters([
-                //
-            ])
+                Filter::make('created_at')
+                ->label('Date')
+                        ->form([
+                            Grid::make(2) 
+                            ->schema([
+                                DatePicker::make('date_from')
+                                    ->label("Du"),
+                                DatePicker::make('date_to')
+                                    ->label("Au"),
+                            ])->columns(1)
+                        ])
+                        ->query(function (Build $query, array $data): Build {
+
+                            return $query
+                                ->when(
+                                    $data['date_from'],
+                                    fn (Build $query, $date): Build => $query->whereDate('created_at', '>=' , $date)
+                                )
+                                ->when(
+                                    $data['date_to'],
+                                    fn (Build $query, $date):Build => $query->whereDate('created_at', '<=' , $date)
+                                );    
+                        })
+                        ->indicateUsing(function (array $data): ?string {
+
+                            if (( $data['date_from']) && ($data['date_from'])) {
+
+                                return 'Du ' . Carbon::parse($data['date_from'])->format('d-m-Y')." au ".Carbon::parse($data['date_to'])->format('d-m-Y');
+                            }
+                            return null;
+                        }),
+                    SelectFilter::make('Type')
+                        ->multiple()                                 
+                        ->label('Opération')
+                        ->options([
+                            TypesClass::Retrait()->value => 'Retraits',
+                            TypesClass::Depot()->value => 'Dépôts',
+                        ])
+                ], layout: FiltersLayout::AboveContentCollapsible)
+                ->filtersTriggerAction(
+                    fn (Action $action) => $action
+                        ->button()
+                        ->label('Filtrer les résultats'),
+                )
+            
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])

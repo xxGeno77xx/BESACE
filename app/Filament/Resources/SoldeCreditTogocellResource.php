@@ -48,7 +48,7 @@ class SoldeCreditTogocellResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->label('RECHARGER'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -22,24 +22,24 @@ class EditRia extends EditRecord
 
     public function afterSave()
     {
-     
-    //    $updateValues= $data;
+
+        //    $updateValues= $data;
 
         $MontantTotalPaye = 0;
 
-        $ria= $this->record;
-           
+        $ria = $this->record;
+
         $MontantPaye = $ria->Montant; // array
 
-        for($i= 0; $i < count($MontantPaye); $i++){
+        for ($i = 0; $i < count($MontantPaye); $i++) {
 
-            $MontantTotalPaye =  $MontantTotalPaye + $MontantPaye[$i]['valeur'];
+            $MontantTotalPaye = $MontantTotalPaye + $MontantPaye[$i]['valeur'];
         }
-
-        $ria->update([
-            'Commission'=> $ria->remboursement - $MontantTotalPaye
-        ]);
-
+        if (!$ria->remboursement == NULL) {
+            $ria->update([
+                'Commission' => $ria->remboursement - $MontantTotalPaye
+            ]);
+        }
 
     }
 }

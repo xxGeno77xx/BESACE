@@ -32,11 +32,8 @@ class RiaResource extends Resource
     protected static ?string $navigationGroup = 'Transferts d\'argent';
     protected static ?string $label = 'Ria';
     protected static ?string $pluralLabel = 'Ria';
-
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
     protected static ?string $model = Ria::class;
-
-
     public static function form(Form $form): Form
     {
         return $form
@@ -49,7 +46,7 @@ class RiaResource extends Resource
                 Repeater::make('Montant')
                     ->schema([
                         TextInput::make('valeur')
-                        ->required(),
+                            ->required(),
                         DatePicker::make('Date')
                             ->required(),
                     ])
@@ -58,14 +55,13 @@ class RiaResource extends Resource
                 Hidden::make('user_id')
                     ->default(auth()->user()->id),
                 Hidden::make('Commission')
-                    ->default(0),                 
+                    ->default(0),
                 Hidden::make('operation')
                     ->default(TypesClass::Ria()->value),
-                 Hidden::make('Type')
+                Hidden::make('Type')
                     ->default(TypesClass::Retrait()->value),
             ]);
     }
-
     public static function table(Table $table): Table
     {
         return $table
@@ -75,14 +71,14 @@ class RiaResource extends Resource
 
                         $arraySize = count($record->Montant);
 
-                        $returnArray= [];
+                        $returnArray = [];
 
-                        for($i= 0; $i <  $arraySize; $i++){
+                        for ($i = 0; $i < $arraySize; $i++) {
 
-                            $returnArray[$i] = $record->Montant[$i]['valeur'].' du '.carbon::parse(($record->Montant[$i]['Date']))->format('d-m-y');
-                        
+                            $returnArray[$i] = $record->Montant[$i]['valeur'] . ' du ' . carbon::parse(($record->Montant[$i]['Date']))->format('d-m-y');
+
                         }
-                    return implode(" ,", $returnArray);
+                        return implode(" ,", $returnArray);
                     })
                     // ->description(function (Model $record): string {
 
@@ -93,7 +89,7 @@ class RiaResource extends Resource
                     //     for($i= 0; $i <  $arraySize; $i++){
 
                     //         $returnArray[$i] = $record->Montant[$i]['valeur'];
-                        
+
                     //     }
 
                     // return implode(",", $returnArray);
@@ -107,7 +103,8 @@ class RiaResource extends Resource
                 JsonColumn::make('Montant')
                     ->label('Montants')
                     ->toggleable()
-                    ->summarize(Summarizer::make()
+                    ->summarize(
+                        Summarizer::make()
                     ),
                 TextColumn::make('Commission')
                     ->numeric(
@@ -122,7 +119,7 @@ class RiaResource extends Resource
                     ->label('Date du remboursement')
                     ->placeholder('-')
                     ->date('l, d-M-Y'),
-                
+
 
             ])
             ->filters([
@@ -137,14 +134,14 @@ class RiaResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -152,5 +149,5 @@ class RiaResource extends Resource
             'create' => Pages\CreateRia::route('/create'),
             'edit' => Pages\EditRia::route('/{record}/edit'),
         ];
-    }    
+    }
 }

@@ -10,12 +10,13 @@ use App\Enums\TypesClass;
 use Filament\Tables\Table;
 use App\Models\CreditTogocell;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
-use Filament\Forms\Components\Select;
 
+use Filament\Forms\Components\Select;
 use Illuminate\Database\Query\Builder;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -62,7 +63,7 @@ class CreditTogocellResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('Numéro_telephone'),
-                TextColumn::make('Montant'),
+                BadgeColumn::make('Montant'),
                 TextColumn::make('solde_restant_credit_togocell'),
                 BadgeColumn::make('Type_operation')
                             ->colors([
@@ -71,14 +72,20 @@ class CreditTogocellResource extends Resource
                                 'danger' => static fn ($state): bool => $state === TypesClass::CreditSimple()->value,
                                 'yellow' => static fn ($state): bool => $state === TypesClass::Recharge()->value,
 
-                                ])
-                            ->summarize([
-                                Count::make()->query(fn (Builder $query) => $query->where('Type_operation', TypesClass::Recharge()->value))
-                                            ->label('Nombre de recharges'),   
                             ]),
+                            // ->summarize([
+                            //     Count::make()->query(fn (Builder $query) => $query->where('Type_operation', TypesClass::Recharge()->value))
+                            //                 ->label('Nombre de recharges'),   
+                            // ]),
                 TextColumn::make('created_at')
                 ->label('Date')
                 ->date('l,d-m-Y'),
+                
+                BadgeColumn::make('commission')
+                ->label('Commission')
+                ->placeholder('-')
+                ->color(Color::Green)
+                ->summarize(Sum::make()->label('Total des commissions')),
             ])
             ->filters([
                 Filter::make('created_at')
@@ -131,9 +138,9 @@ class CreditTogocellResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
     

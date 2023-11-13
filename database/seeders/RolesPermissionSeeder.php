@@ -80,7 +80,7 @@ class RolesPermissionSeeder extends Seeder
         ]);
 
         $soldeCreditTogocell  = SoldeCreditTogocell::firstOrCreate([
-            "Montant" => 17000, 
+            "Montant" => 20000, 
         ]);
 
         $soldeCaisseTogocell  = CaisseTogocell::firstOrCreate([
