@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\CreditMoovResource\Pages;
 
-use App\Filament\Resources\CreditMoovResource;
+use Filament\Actions;
 use App\Models\CaisseMoov;
 use App\Models\SoldeCreditMoov;
-use Filament\Actions;
+use Filament\Support\Colors\Color;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\CreditMoovResource;
 
 class CreateCreditMoov extends CreateRecord
 {
@@ -29,6 +31,25 @@ class CreateCreditMoov extends CreateRecord
         CaisseMoov::first()->update([
             'Montant' =>  $soldeCaisseMoov + $moov->Montant
         ]);
+    }
+
+
+    protected function beforeCreate()
+    {
+        $togocell = $this->data;
+
+        $soldeCreditTogocell = SoldeCreditMoov::first()->Montant;
+
+        if ( $soldeCreditTogocell - intval($togocell["Montant"]) <= 0) {
+
+            Notification::make("warning")
+                ->title("Solde insuffisant")
+                ->body("Le solde de votre compte Togocell est insuffisant pour cette opération.")
+                ->color(Color::Yellow)
+                ->send();
+
+            $this->halt();
+        };
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array

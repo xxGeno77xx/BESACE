@@ -48,7 +48,11 @@ class CreditTogocellResource extends Resource
                     ->numeric(),
                 TextInput::make('Numéro_telephone')
                     ->tel(),
+                    TextInput::make('commission')
+                    ->label("Commission")
+                    ->tel(),
                 Select::make('Type_operation')
+                ->native(false)
                     ->options([
                     TypesClass::Forfait_appel()->value => 'Forfait appel',
                     TypesClass::Forfait_internet()->value => 'Forfait internet',

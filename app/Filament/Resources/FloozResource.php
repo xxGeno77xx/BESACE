@@ -44,6 +44,7 @@ class FloozResource extends Resource
                 TextInput::make('Commission'),
                 TextInput::make('Téléphone'),
                 Select::make('Type')
+                ->native(false)
                 ->options([
                     TypesClass::Retrait()->value => 'Retrait',
                     TypesClass::Depot()->value => 'Dépot'

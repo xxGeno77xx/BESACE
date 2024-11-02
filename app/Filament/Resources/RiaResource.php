@@ -48,7 +48,9 @@ class RiaResource extends Resource
                         TextInput::make('valeur')
                             ->required(),
                         DatePicker::make('Date')
-                            ->required(),
+                            ->required()
+                            ->default(today())
+                            ->displayFormat("d/m-y"),
                     ])
                     ->addActionLabel('Ajouter une opération')
                     ->columns(2),

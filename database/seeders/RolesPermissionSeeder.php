@@ -46,7 +46,7 @@ class RolesPermissionSeeder extends Seeder
 
         $superAdminUser  = User::firstOrCreate([
             "email" => "superadministrateur@laposte.tg",
-            'password' => Hash::make('11111111'),
+            'password' => Hash::make('password'),
             'name' => 'Super_administrateur',
 
         ]);
@@ -144,7 +144,6 @@ class RolesPermissionSeeder extends Seeder
                 'Type'=>TypesClass::Depot()->value,
                 'Solde_tmoney_restant' =>mt_rand(1,10000),
                 'Commission' => mt_rand(5,1000)*mt_rand(0,5),
-                
                 'Montant' => mt_rand(5,50000),
                 'Téléphone' => mt_rand(5,50000),
                 'user_id' => 1,

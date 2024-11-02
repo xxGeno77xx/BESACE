@@ -71,7 +71,7 @@ class TmoneyResource extends Resource
                 ]),
                 TextColumn::make('created_at')
                 ->label('Date')
-                ->date('H:i d-m-Y'),
+                ->date('d-m-Y H:i '),
                 TextColumn::make('Commission')
                 ->numeric(
                     decimalPlaces: 0,

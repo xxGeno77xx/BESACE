@@ -44,11 +44,16 @@ class CreditMoovResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('Numéro_telephone')
-                ->tel(),
+               
                 TextInput::make('Montant')
                 ->numeric(),
+                TextInput::make('Numéro_telephone')
+                ->tel(),
+                TextInput::make('commission')
+                ->label("Commission")
+                ->numeric(),
                 Select::make('Type_operation')
+                ->native(false)
                 ->options([
                     TypesClass::Forfait_appel()->value => 'Forfait appel',
                     TypesClass::Forfait_internet()->value => 'Forfait internet',

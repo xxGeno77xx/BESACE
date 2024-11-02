@@ -74,7 +74,7 @@ class UsersResource extends Resource
                         Sum::make()->label('Total des opérations')
                             ->query(function (Build $query){
 
-                                $query->where('Type', TypesClass::Retrait()->value)->dumpRawSql();
+                                $query->where('Type', TypesClass::Retrait()->value);
                                     // ->whereNot('Type', TypesClass::Retrait()->value);
 
                             })

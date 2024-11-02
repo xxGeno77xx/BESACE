@@ -45,7 +45,7 @@ class XpressResource extends Resource
     protected static ?string $label = 'Xpress';
     protected static ?string $pluralLabel = 'Xpress';
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static ?string $navigationIcon = 'icon-xp';
 
     public static function form(Form $form): Form
     {
@@ -88,7 +88,7 @@ class XpressResource extends Resource
                     ]),
                 TextColumn::make('created_at')
                     ->label('Date')
-                    ->date('H:i d-m-Y'),
+                    ->date('d-m-Y H:i '),
                 TextColumn::make('commission')
                     ->numeric()
                     ->summarize([
